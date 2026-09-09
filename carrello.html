@@ -1,0 +1,11 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Carrello | MD Mobile Center</title><link rel="stylesheet" href="/styles.css"></head><body>
+<header class="header"><a class="brand" href="/"><img src="/assets/logo-md.jpg"><div><strong>MD MOBILE CENTER</strong><small>VENDITA • ASSISTENZA • RIPARAZIONI</small></div></a><a class="btn small" href="/">← Continua acquisti</a></header>
+<main class="checkout-page"><h1>Il tuo carrello</h1><div id="cart"></div><div id="checkout"></div></main>
+<script>
+function render(){let c=JSON.parse(localStorage.getItem('mdcart')||'[]');let box=document.getElementById('cart');if(!c.length){box.innerHTML='<p>Il carrello è vuoto.</p>';document.getElementById('checkout').innerHTML='';return}
+let total=c.reduce((s,i)=>s+i.price*i.qty,0);box.innerHTML=c.map(i=>`<div class="cart-row"><div><b>${i.name}</b><small>${i.storage} • ${i.condition}</small></div><div>Q.tà ${i.qty}</div><strong>€ ${(i.price*i.qty).toLocaleString('it-IT',{minimumFractionDigits:2})}</strong><button onclick="removeItem('${i.id}')">✕</button></div>`).join('');
+document.getElementById('checkout').innerHTML=`<div class="total">Totale <b>€ ${total.toLocaleString('it-IT',{minimumFractionDigits:2})}</b></div><button class="btn pay" onclick="goCheckout()">PAGA CON CARTA</button><p class="note">Il pagamento è gestito in modo sicuro da Stripe. I dati della carta non vengono memorizzati dal tuo sito.</p>`}
+function removeItem(id){let c=JSON.parse(localStorage.getItem('mdcart')||'[]').filter(x=>x.id!==id);localStorage.setItem('mdcart',JSON.stringify(c));render()}
+async function goCheckout(){let c=JSON.parse(localStorage.getItem('mdcart')||'[]');let r=await fetch('/api/create-checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({items:c})});let d=await r.json();if(d.url)location.href=d.url;else alert(d.error||'Errore nel pagamento');}
+render();
+</script></body></html>

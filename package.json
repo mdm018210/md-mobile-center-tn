@@ -1,0 +1,9 @@
+{
+  "name": "md-mobile-center-tn",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "stripe": "^18.5.0"
+  }
+}

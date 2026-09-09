@@ -1,0 +1,8 @@
+<!doctype html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Admin | MD Mobile Center</title><link rel="stylesheet" href="/styles.css"></head><body>
+<main class="checkout-page"><h1>MD Mobile Center — Ordini</h1>
+<div id="login"><p>Accesso riservato.</p><input id="pw" type="password" placeholder="Password amministratore"><button class="btn" onclick="login()">ENTRA</button></div>
+<div id="orders"></div></main>
+<script>
+async function login(){let r=await fetch('/api/admin-login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('pw').value})});if(r.ok){document.getElementById('login').style.display='none';load()}else alert('Password errata')}
+async function load(){let r=await fetch('/api/admin-orders');if(!r.ok){alert('Database non configurato o sessione scaduta');return}let a=await r.json();document.getElementById('orders').innerHTML=a.length?a.map(o=>`<div class="cart-row"><div><b>Ordine ${o.id.slice(0,8)}</b><small>${o.customer_name||''} • ${o.email||''}</small><small>${new Date(o.created_at).toLocaleString('it-IT')}</small></div><div>${o.status}</div><strong>€ ${(o.total_cents/100).toLocaleString('it-IT',{minimumFractionDigits:2})}</strong><div>${JSON.parse(o.items_json).map(i=>`${i.qty}× ${i.name}`).join('<br>')}</div></div>`).join(''):'Nessun ordine.'}
+</script></body></html>

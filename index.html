@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MD Mobile Center | Vendita, assistenza e riparazioni</title>
+  <meta name="description" content="MD Mobile Center - vendita telefoni nuovi e usati certificati, riparazioni, accessori e assistenza a Rovereto.">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="topbar"><span>⚡ Riparazioni rapide</span><span>•</span><span>Qualità garantita</span><span>•</span><span>Assistenza professionale</span><div class="top-contact">☎ 350 0117950 &nbsp;&nbsp; WhatsApp 349 7487936</div></div>
+
+  <header class="header">
+    <a class="brand" href="/">
+      <img src="/assets/logo-md.jpg" alt="MD Mobile Center">
+      <div><strong>MD MOBILE CENTER</strong><small>VENDITA • ASSISTENZA • RIPARAZIONI</small></div>
+    </a>
+    <nav><a href="#home">Home</a><a href="#prodotti">Prodotti</a><a href="#servizi">Servizi</a><a href="#contatti">Contatti</a></nav>
+    <a class="cart" href="/carrello.html">🛒 <span id="cart-count">0</span></a>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="hero-logo"><img src="/assets/logo-md.jpg" alt=""></div>
+      <div>
+        <p class="eyebrow">MD MOBILE CENTER • ROVERETO</p>
+        <h1>IL TUO TELEFONO<br><em>IN BUONE MANI</em></h1>
+        <p>Vendita di telefoni nuovi e usati, riparazioni e assistenza specializzata.</p>
+        <a class="btn" href="#prodotti">SCOPRI I PRODOTTI →</a>
+      </div>
+      <div class="hero-phones">📱<span>📱</span>🎧</div>
+    </section>
+
+    <section class="services-strip">
+      <div><b>📱 VENDITA CELLULARI</b><small>Nuovi e usati certificati</small></div>
+      <div><b>🔧 RIPARAZIONI</b><small>Schermi • Batterie • Software</small></div>
+      <div><b>🎧 ACCESSORI</b><small>Cover • Cuffie • Caricatori</small></div>
+      <div><b>🛡️ GARANZIA</b><small>Prodotti controllati</small></div>
+      <div><b>♻️ PERMUTE</b><small>Valutazione del tuo usato</small></div>
+    </section>
+
+    <section id="prodotti" class="section">
+      <div class="section-title"><h2>I NOSTRI TELEFONI</h2><span>Acquista online in sicurezza</span></div>
+      <div id="products" class="products"><p>Caricamento prodotti...</p></div>
+    </section>
+
+    <section id="servizi" class="repair">
+      <div><p class="eyebrow">RIPARAZIONI CELLULARI</p><h2>Schermi • Batterie • Software<br>Assistenza di ogni marca</h2><p>Portaci il tuo dispositivo: valutazione e assistenza professionale.</p><a class="btn" href="https://wa.me/393497487936" target="_blank" rel="noopener">CONTATTACI SU WHATSAPP →</a></div>
+      <div class="repair-icons">📱 &nbsp; 🔋 &nbsp; ⚙️ &nbsp; ⏱️</div>
+    </section>
+
+    <section class="why">
+      <h2>PERCHÉ SCEGLIERCI?</h2>
+      <div class="why-grid">
+        <div><b>👍 Esperienza e professionalità</b><p>Servizio attento e assistenza dedicata.</p></div>
+        <div><b>🛡️ Prodotti garantiti</b><p>Dispositivi controllati e certificati.</p></div>
+        <div><b>€ Prezzi competitivi</b><p>Un buon rapporto qualità-prezzo.</p></div>
+        <div><b>🎧 Assistenza sempre</b><p>Ti seguiamo anche dopo l'acquisto.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contatti">
+    <div class="footer-grid">
+      <div><img src="/assets/logo-md.jpg" class="footer-logo" alt="MD Mobile Center"><h3>MD MOBILE CENTER</h3><p>Vendita • Assistenza • Riparazioni</p></div>
+      <div><b>📍 Dove siamo</b><p>Piazza Rosmini 17<br>Rovereto (TN)</p><b>☎ 350 0117950</b><br><b>WhatsApp 349 7487936</b></div>
+      <div><b>✉ Contatti</b><p>mobilecenter.rovereto@gmail.com</p><b>🕘 Orari</b><p>Lun–Sab: 09:00–19:30<br>(orario continuato)</p></div>
+    </div>
+    <div class="legal"><a href="/privacy.html">Privacy</a><a href="/cookie.html">Cookie</a><a href="/termini.html">Termini di vendita</a><a href="/recesso.html">Diritto di recesso</a><span>© 2026 MD Mobile Center</span></div>
+  </footer>
+<script>
+async function loadProducts(){
+  const r=await fetch('/api/products'); const products=await r.json();
+  document.getElementById('products').innerHTML=products.map(p=>`
+    <article class="card">
+      <div class="product-img">${p.image ? `<img src="${p.image}" alt="${p.name}">` : '📱'}</div>
+      <h3>${p.name}</h3><p>${p.storage} • ${p.color}</p><p class="condition">${p.condition}</p>
+      <strong class="price">€ ${Number(p.price).toLocaleString('it-IT',{minimumFractionDigits:2})}</strong>
+      <button class="add" onclick='addToCart(${JSON.stringify(p)})'>🛒 Aggiungi al carrello</button>
+    </article>`).join('');
+}
+function addToCart(p){let c=JSON.parse(localStorage.getItem('mdcart')||'[]');let x=c.find(i=>i.id===p.id);if(x)x.qty++;else c.push({...p,qty:1});localStorage.setItem('mdcart',JSON.stringify(c));updateCount();alert('Prodotto aggiunto al carrello');}
+function updateCount(){let c=JSON.parse(localStorage.getItem('mdcart')||'[]');document.getElementById('cart-count').textContent=c.reduce((s,i)=>s+i.qty,0)}
+updateCount();loadProducts();
+</script>
+</body></html>

@@ -1,0 +1,8 @@
+name = "md-mobile-center-tn"
+compatibility_date = "2026-09-01"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "md-mobile-center"
+database_id = "61328050-9f3e-40d7-a5d1-46f99e66e9c7"
